@@ -54,7 +54,7 @@ jobs:
                   build-args: |
                       BUILD_IMAGE=${{ env.OS_NAME }}:${{ env.OS_VERSION }}
                       GOLANG_IMAGE=${{ env.GOLANG_IMAGE }}
-                  platforms: linux/amd64,linux/arm64,linux/arm/v7
+                  platforms: linux/amd64
                   push: true
                   tags: |
                       ghcr.io/${{ github.repository_owner }}/club-${{ env.service_name }}:${{ env.OS_NAME }}-${{ env.service_name }}-${{ env.OBS_VERSION }}
