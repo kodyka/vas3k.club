@@ -1,13 +1,15 @@
 version: "3"
 services:
   club_app: &app
-    image: ghcr.io/vas3k/club:${GITHUB_SHA:-latest}
+    build:
+      dockerfile: Dockerfile.alpine.dev.multi
+      context: .
     command: make docker-run-production
     container_name: club_app
     environment:
       - MODE=production
       - PYTHONUNBUFFERED=1
-      - DEBUG=false
+      - DEBUG=true
       - APP_HOST=https://vas3k.club
       - MEDIA_UPLOAD_URL=https://i.vas3k.club/upload/
       - POSTGRES_DB=vas3k_club
@@ -41,20 +43,20 @@ services:
       - redis
     ports: []
 
-  bot:
-    <<: *app
-    command: make docker-run-bot
-    container_name: club_bot
-    depends_on:
-      - club_app
-      - postgres
-      - redis
-    ports:
-      - "8816:8816"
+  # bot:
+  #   <<: *app
+  #   command: make docker-run-bot
+  #   container_name: club_bot
+  #   depends_on:
+  #     - club_app
+  #     - postgres
+  #     - redis
+  #   ports:
+  #     - "8816:8816"
 
   cron:
     <<: *app
-    command: make docker-run-cron
+    command: make docker-run-cron-alpine
     container_name: club_cron
     depends_on:
       - club_app
