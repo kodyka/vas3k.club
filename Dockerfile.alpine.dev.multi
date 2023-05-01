@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED 1
 RUN apk add --update --no-cache postgresql-client jpeg-dev
 RUN apk add --update --no-cache --virtual .tmp-build-deps \
       gcc libc-dev linux-headers postgresql-dev musl-dev zlib zlib-dev \
-    && apk add libffi-dev make
+    && apk add libffi-dev make libxml2-dev libxslt-dev
 
 WORKDIR /app
 
@@ -23,7 +23,12 @@ RUN pip3 install pipenv==2021.5.29
 RUN sh -c 'if [ "$MODE" = 'production' ]; then pipenv lock --keep-outdated --requirements > requirements.txt; fi'
 RUN sh -c 'if [ "$MODE" = 'dev' ]; then pipenv lock --dev --requirements > requirements.txt; fi'
 RUN pip3 install -r requirements.txt
+# Build node
+FROM node:14.21-alpine as node
 
+COPY /frontend /frontend
+
+RUN cd frontend && npm install && npm run build && cd ..
 # Final stage
 FROM python:3.8.16-alpine3.17
 
@@ -32,5 +37,9 @@ RUN apk add --update --no-cache make postgresql-libs
 COPY --from=build /app /app
 COPY --from=build /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
 # COPY --from=build /usr/local/bin/ /usr/local/bin/
+COPY --from=node /frontend/static /app/frontend/static
+
+COPY etc/crontab /etc/crontab
+RUN chmod 600 /etc/crontab
 
 WORKDIR /app
