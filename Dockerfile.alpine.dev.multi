@@ -44,7 +44,9 @@ COPY --from=build /usr/src/app/wheels /wheels
 # COPY --from=build /app/requirements.txt .
 # COPY --from=build /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
 # COPY --from=build /usr/local/bin/ /usr/local/bin/
-COPY --from=node /frontend/static /app/frontend/static
+COPY --from=node /frontend /app/frontend
+
+RUN rm -rf /app/frontend/node_modules
 
 RUN pip3 install pipenv==2021.5.29
 RUN pip3 install --no-cache /wheels/*
