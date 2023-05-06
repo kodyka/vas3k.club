@@ -1,4 +1,4 @@
-name: "Build base:alpine-core on ghc"
+name: "Build unit:alpine-core on ghc"
 
 on:
     workflow_dispatch:
