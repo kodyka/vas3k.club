@@ -37,6 +37,51 @@ docker-run-dev:  ## Runs dev server in docker
 	python3 manage.py update_tags
 	python3 manage.py runserver 0.0.0.0:8000
 
+docker-run-production-unit: docker-migrate docker-update-achievements
+	cp -r /opt/app/frontend/static /tmp/
+	unitd --no-daemon --control unix:/var/run/control.unit.sock
+	curl -X PUT --data-binary @- --unix-socket /run/control.unit.sock http://localhost/config <<EOF
+	{
+		"listeners":{
+		"*:8814":{
+			"pass":"routes"
+		}
+		},
+		"routes":[
+		{
+			"match":{
+				"uri":"/static/*"
+			},
+			"action":{
+				"share":"/opt/app$uri"
+			}
+		},
+		{
+			"match":{
+				"uri":"/media/*"
+			},
+			"action":{
+				"share":"/opt/app$uri"
+			}
+		},
+		{
+			"action":{
+				"pass":"applications/django"
+			}
+		}
+		],
+		"applications":{
+		"django":{
+			"type":"python",
+			"processes":4,
+			"threads":4,
+			"path":"/opt/app",
+			"module":"club.asgi"
+		}
+		}
+	}
+	EOF
+
 docker-run-production: docker-migrate docker-update-achievements
 	cp -r /app/frontend/static /tmp/
 	gunicorn club.asgi:application -w 7 -k uvicorn.workers.UvicornWorker --bind=0.0.0.0:8814 --capture-output --log-level debug --access-logfile - --error-logfile -

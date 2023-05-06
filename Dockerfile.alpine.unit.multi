@@ -1,0 +1,53 @@
+# Build stage
+FROM python:3.8-alpine3.13 AS builder
+ENV MODE dev
+
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /root
+
+COPY ./Pipfile ./Pipfile.lock /root/
+
+RUN apk add --no-cache make gcc g++ musl-dev python3-dev postgresql-dev \
+    libffi-dev libxml2-dev libxslt-dev
+RUN apk add --no-cache pango zlib-dev jpeg-dev libffi-dev openjpeg-dev
+
+RUN pip3 install pipenv==2021.5.29
+RUN sh -c 'if [ "$MODE" = 'production' ]; then pipenv lock --keep-outdated --requirements > requirements.txt; fi'
+RUN sh -c 'if [ "$MODE" = 'dev' ]; then pipenv lock --dev --requirements > requirements.txt; fi'
+# RUN pip3 install --no-cache-dir --user -r requirements.txt
+RUN pip3 wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+# Build node
+FROM node:14.21-alpine as node
+COPY /frontend /frontend
+RUN cd frontend && npm install && npm run build
+RUN rm -rf /frontend/node_modules
+
+# Final image
+FROM python:3.8-alpine3.13
+
+WORKDIR /opt/app
+
+RUN apk add --no-cache unit unit-python3 dcron make curl postgresql-client pango zlib jpeg openjpeg font-noto msttcorefonts-installer
+
+COPY --chown=unit --from=builder /usr/src/app/wheels /wheels
+# ENV PATH=/opt/.local/bin:$PATH
+# ENV PYTHONPATH=/opt/.local/lib/python3.8/site-packages
+
+# RUN pip3 install pipenv==2021.5.29
+RUN pip3 install --no-cache /wheels/*
+RUN rm -rf /wheels
+RUN chown -R unit:unit /usr/local/lib/python3.8/site-packages
+
+COPY --chown=unit --from=node /frontend /opt/app/frontend
+COPY --chown=unit . .
+COPY ./etc/unit/django.unit.json /var/lib/unit/
+# COPY ./unit-docker-entrypoint.sh /usr/local/bin/
+
+COPY etc/crontab /etc/crontabs/root
+RUN chmod 600 /etc/crontabs/root
+
+# ENTRYPOINT ["/usr/local/bin/unit-docker-entrypoint.sh"]
+
+CMD ["unitd", "--no-daemon", "--control", "unix:/var/run/control.unit.sock"]
