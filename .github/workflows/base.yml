@@ -50,7 +50,7 @@ jobs:
               with:
                   builder: ${{ steps.buildx.outputs.name }}
                   context: .
-                  file: ./Dockerfile.${{ env.OS_NAME }}.dev.multi
+                  file: ./Dockerfile.${{ env.OS_NAME }}.{{ env.service_name }}.multi
                   build-args: |
                       BUILD_IMAGE=${{ env.OS_NAME }}:${{ env.OS_VERSION }}
                       GOLANG_IMAGE=${{ env.GOLANG_IMAGE }}
