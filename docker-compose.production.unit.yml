@@ -4,7 +4,7 @@ services:
     build:
       dockerfile: Dockerfile.alpine.unit.multi
       context: .
-    command: make docker-run-production-unit
+    # command: make docker-run-production-unit
     container_name: club_app
     environment:
       - MODE=production
