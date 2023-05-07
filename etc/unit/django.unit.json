@@ -10,7 +10,7 @@
              "uri":"/static/*"
           },
           "action":{
-             "share":"/opt/app$uri"
+             "share":"/opt/app/frontend$uri"
           }
        },
        {
