@@ -1,3 +1,9 @@
+https://teletype.in/@toptuk/pmiclub2
+https://medium.com/@betancourt.francisco/episode-6-running-a-django-app-in-production-with-nginx-unit-c4813e262aa2
+https://briancaffey.github.io/2019/01/09/django-docker-vue-nginx-drf-traefik-celery.html
+
+https://plotnikova1111.medium.com/migrate-your-django-monolith-to-microservices-1st-step-preparation-9da8837286e0
+
 https://github.com/zsiegel/docker-caddy-load-balancer
 https://github.com/matacoder/caddy-docker
 https://tfeldmann.de/blog/serving-django-with-caddy/
