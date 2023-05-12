@@ -1,0 +1,18 @@
+
+# Build node
+FROM node:14.21-alpine as node
+COPY /frontend /frontend
+RUN cd frontend && npm install && npm run build
+RUN rm -rf /frontend/node_modules
+
+# Final image
+FROM caddy:2.6.4-alpine
+
+COPY /etc/caddy/config/Caddyfile /etc/caddy/Caddyfile
+
+COPY --from=node /frontend /opt/app/frontend
+
+
+# ENTRYPOINT ["/usr/local/bin/unit-docker-entrypoint.sh"]
+
+# CMD ["unitd", "--no-daemon", "--control", "unix:/run/control.unit.sock"]

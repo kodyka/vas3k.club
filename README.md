@@ -1,3 +1,8 @@
+https://github.com/zsiegel/docker-caddy-load-balancer
+https://github.com/matacoder/caddy-docker
+https://tfeldmann.de/blog/serving-django-with-caddy/
+https://stribny.name/blog/caddy-config/
+
 <div align="center">
   <br>
   <img src="frontend/static/images/logo/logo-256.png" alt="">

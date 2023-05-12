@@ -1,0 +1,63 @@
+:80 {
+	encode zstd gzip
+    request_body {
+        max_size 30MB
+    }
+
+	handle_path /static/* {
+        header Cache-Control "public"
+        header Cache-Control max-age=31536000
+		file_server {
+            precompressed gzip
+			root "/opt/app/frontend"
+            
+		}
+	}
+
+	handle_path /media/* {
+        header Cache-Control "public"
+        header Cache-Control max-age=31536000
+		file_server {
+            precompressed gzip
+			root "/path/to/proj/media"
+		}
+	}
+
+	handle_path /telegram/webhook/* {
+
+        	reverse_proxy 127.0.0.1:8086 {
+            header_up Host {host}
+            header_up X-Forwarded-For {remote}
+            header_up X-Forwarded-Proto {scheme}
+            flush_interval -1
+	}
+
+	handle {
+            header Access-Control-Allow-Origin "*"
+            header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+            header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range"
+            header Access-Control-Expose-Headers "Content-Length,Content-Range"
+
+            header Strict-Transport-Security "max-age=31536000;includeSubDomains"
+            header X-Content-Type-Options "nosniff"
+            header Referrer-Policy "strict-origin-when-cross-origin"
+            header Permissions-Policy "accelerometer=(),camera=(),geolocation=(self 'https://vas3k.club'),gyroscope=(),magnetometer=(),microphone=(),payment=(),usb=()"
+
+		reverse_proxy 127.0.0.1:8080 127.0.0.1:8081 {
+
+            header_up Host {host}
+            header_up X-Forwarded-For {remote}
+            header_up X-Forwarded-Proto {scheme}
+            flush_interval -1
+
+            health_uri /
+            health_interval 5s
+            health_timeout 3s
+            health_status 200
+
+            fail_duration 1s
+		    unhealthy_request_count 10000
+
+        }
+	}
+}
