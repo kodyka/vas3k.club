@@ -1,5 +1,5 @@
 <template>
-    <MglMap
+    <MapboxMap
         :accessToken="accessToken"
         :mapStyle="mapStyle"
         :maxZoom="12"
@@ -7,24 +7,24 @@
         :scrollZoom="false"
         @load="onMapLoaded"
     >
-        <MglNavigationControl position="top-right" />
-        <MglGeolocateControl position="top-right" />
+        <MapboxNavigationControl position="top-right" />
+        <MapboxGeolocateControl position="top-right" />
         <slot></slot>
-    </MglMap>
+    </MapboxMap>
 </template>
 
 <script>
 import Mapbox from "mapbox-gl";
 
-import { MglMap, MglNavigationControl, MglGeolocateControl, MglMarker } from "vue-mapbox-ho";
+import { MapboxMap, MapboxNavigationControl, MapboxGeolocateControl, MapboxMarker } from "@studiometa/vue-mapbox-gl";
 
 export default {
     name: "PeopleMap",
     components: {
-        MglMap,
-        MglNavigationControl,
-        MglGeolocateControl,
-        MglMarker,
+        MapboxMap,
+        MapboxNavigationControl,
+        MapboxGeolocateControl,
+        MapboxMarker,
     },
     props: {
         geojson: {
