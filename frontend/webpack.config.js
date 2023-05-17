@@ -13,7 +13,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, "static/dist"),
         publicPath: "/static/dist/",
-        filename: mode === "production" ? "[name]-[hash].js": "[name].js",
+        filename: mode === "production" ? "[name]-[fullhash].js": "[name].js",
         libraryTarget: "var",
         library: "Club",
     },
@@ -23,7 +23,7 @@ module.exports = {
             filename: "webpack-stats.json",
         }),
         new MiniCssExtractPlugin({
-            filename: mode === "production" ? "[name]-[hash].css": "[name].css",
+            filename: mode === "production" ? "[name]-[fullhash].css": "[name].css",
             chunkFilename: "[id].css",
             ignoreOrder: false, // Enable to remove warnings about conflicting order
         }),
@@ -54,14 +54,22 @@ module.exports = {
             },
             {
                 test: /\.vue$/,
-                loader: "vue-loader"
+                loader: "vue-loader",
+                options: {
+                  compilerOptions: {
+                    compatConfig: {
+                      // Default everything to Vue 2 behavior
+                      MODE: 2
+                    }
+                  }
+                }
             }
         ]
     },
     devtool: "source-map",
     resolve: {
         alias: {
-            vue: mode === "production" ? "vue/dist/vue.min.js" : "vue/dist/vue.js",
+            vue: mode === "production" ? "@vue/compat" : "@vue/compat",
             "vue-mapbox-ho": "vue-mapbox-ho/dist/vue-mapbox.min.js",
         }
     }
