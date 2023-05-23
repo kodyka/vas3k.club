@@ -1,43 +1,47 @@
+# This section specifies package sources
 [[source]]
-name = "pypi"
-url = "https://pypi.org/simple"
-verify_ssl = true
+name = "pypi"     # The name of the PyPI package repository
+url = "https://pypi.org/simple"  # The URL to access the repository
+verify_ssl = true  # Verify SSL certificates when accessing the repository
 
+# This section lists development dependencies
 [dev-packages]
-flake8 = "*"
-pytest = "*"
-django-debug-toolbar = "*"
+flake8 = "*"   # Linter to check for any coding style mistakes
+pytest = "*"   # Testing framework to run unit tests
+django-debug-toolbar = "*"   # Debugging tool to inspect Django requests and responses
 
+# This section lists runtime dependencies
 [packages]
-django = "==3.2.13"
-django-webpack-loader = "1.4.1"
-requests = ">=2.28.2"
-pyjwt = "==2.6.0"
-cryptography = ">=39.0.2"
-patreon = ">=0.5"
-sentry-sdk = ">=1.16.0"
-psycopg2-binary = "==2.8.4"
-awesome-slugify = ">=1.6.5"
-mistune = "==2.0.0a4"
-click = "*"
-pillow = ">=9.0.1"
-django-simple-history = ">=2.8.0"
-python-telegram-bot = "==12.5.1"
-django-q = {version = ">=1.3.5", extras = ["sentry"]}
-redis = ">=3.4.1"
-python-dotenv = ">=0.12"
-newspaper3k = ">=0.2.8"
-django-redis = "==4.11.0"
-gunicorn = "==20.0.4"
-uvicorn = "*"
-uvloop = "*"
-premailer = "==3.6.1"
-typus = "*"
-stripe = "==2.55.0"
-icalendar = "*"
-httptools = "*"
-croniter = "*"
-authlib = "==1.2"
+django = "==3.2.13"    # The version of the Django web framework required
+django-webpack-loader = "1.4.1"  # A package for loading webpack bundles in Django templates
+requests = ">=2.28.2"  # A library for making HTTP requests from Python
+pyjwt = "==2.6.0"      # A JSON Web Token implementation
+cryptography = ">=39.0.2"     # A cryptography library for secure communication
+patreon = ">=0.5"      # A client library for accessing the Patreon API
+sentry-sdk = ">=1.16.0"        # A client library for sending error reports to the Sentry error tracking service
+psycopg2-binary = "==2.8.4"    # A PostgreSQL database adapter
+awesome-slugify = ">=1.6.5"    # A package for generating URL slugs from text
+mistune = "==2.0.0a4"  # A Markdown parser in Python
+click = "*"            # A Python package for creating command line interfaces
+pillow = ">=9.0.1"     # A Python Imaging Library
+django-simple-history = ">=2.8.0"     # An app to track changes to Django models
+python-telegram-bot = "==12.5.1"      # A Python wrapper for the Telegram Bot API
+django-q = {version = ">=1.3.5", extras = ["sentry"]}   # A task queue for Django with Sentry integration
+redis = ">=3.4.1"      # A package for interacting with Redis, a distributed in-memory data store
+python-dotenv = ">=0.12"              # A package for loading environment variables from .env files
+newspaper3k = ">=0.2.8"              # A Python library for web scraping news articles
+django-redis = "==4.11.0"            # A package for using Redis as a cache backend in Django
+gunicorn = "==20.0.4"               # A Python WSGI HTTP Server for UNIX
+uvicorn = "*"          # A lightning-fast ASGI server implementation, built on top of asyncio and httptools.
+uvloop = "*"           # An ultra fast asyncio event loop
+premailer = "==3.6.1"  # A Python library that transforms CSS styles into inline style attributes in HTML documents
+typus = "*"            # A timezone-aware datetime library for Python
+stripe = "==2.55.0"    # A Python library for interacting with the Stripe API
+icalendar = "*"        # A python library to work with iCalendar files
+httptools = "*"        # A set of fast HTTP parsing tools
+croniter = "*"         # A library to parse cron-like time definitions
+authlib = "==1.2"      # A package that provides authentication support for various OAuth services
 
+# This section specifies the required version of Python
 [requires]
-python_version = "3.8"
+python_version = "3.8"  # The required version of Python for the project
